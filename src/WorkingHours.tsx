@@ -13,6 +13,10 @@ import WeeklyInput from "./components/template/weeklyInput";
 
 library.add(faChevronDown, faTrashCan, faPlus, faChevronRight);
 
+const MainContainer = styled.div`
+    margin: 4rem 0;
+`;
+
 const MainTitle = styled.div`
     text-align: center;
 `;
@@ -51,7 +55,7 @@ function WorkingHours() {
         setIsShowSchedule((pre) => !pre);
     }
     return (
-        <div>
+        <MainContainer>
             <MainTitle>2번 과제 - WorkingHours</MainTitle>
 
             <MainBody>
@@ -87,7 +91,7 @@ function WorkingHours() {
                     </MainContent>
                 </BodyWrapper>
             </MainBody>
-        </div>
+        </MainContainer>
     );
 }
 

@@ -57,12 +57,9 @@ function CatViewer() {
                 "https://api.thecatapi.com/v1/images/search?limit=15&api_key=live_k77YJ1Sa3RsUfqEwbuKzrsevPSBW7iCoeeTZKSuj0ahl51TyYwbMXoLhVwwyIIvF"
             )
             .then((el: any) => {
-                console.log(el);
                 setRenderImg((before) => [...before, ...el.data]);
             })
-            .catch((e) => {
-                console.log(e);
-            });
+            .catch((e) => {});
     }
 
     useEffect(() => {
@@ -74,9 +71,7 @@ function CatViewer() {
                 .then((el: any) => {
                     setRenderImg(el.data);
                 })
-                .catch((e) => {
-                    console.log(e);
-                });
+                .catch((e) => {});
         }
 
         fetchData();
@@ -100,7 +95,6 @@ function CatViewer() {
 
     function imgCloseUp() {}
 
-    console.log(isClicked);
     return (
         <div>
             1번 과제 - CatViewer

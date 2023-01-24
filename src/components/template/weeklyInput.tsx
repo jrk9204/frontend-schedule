@@ -11,7 +11,7 @@ const SchedulContainer = styled.div`
 
 const SchedulWrapper = styled.div`
     display: flex;
-    justify-content: space-between;
+
     align-items: center;
     width: 73%;
     padding: 1.5rem 0;
@@ -19,9 +19,10 @@ const SchedulWrapper = styled.div`
 
 const DisplayWeekly = styled.div`
     min-width: 6rem;
+    text-align: center;
 `;
 const FunctionIcons = styled.div`
-    min-width: 3.5rem;
+    min-width: 4rem;
     display: flex;
     align-items: center;
     justify-content: space-around;
@@ -33,13 +34,30 @@ const SetTimeWrapper = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 100%;
 `;
 
 const TimeContainer = styled.div`
     flex: 1;
+    padding: 0 3rem;
 `;
 
+const ButtonContainer = styled.div`
+    text-align: right;
+    margin-top: 1rem;
+`;
+
+const Button = styled.button`
+    border: none;
+
+    margin-left: 1rem;
+
+    background-color: skyblue;
+
+    font-weight: bold;
+    padding: 1rem 1.5rem;
+    font-size: 1.1rem;
+    border-radius: 5px;
+`;
 interface WeeklyDataProps {
     weeklyData: Array<string>;
 }
@@ -78,6 +96,8 @@ function WeeklyInput({ weeklyData }: WeeklyDataProps) {
 
     function handleUpdate() {
         dispatch(updateData());
+
+        window.alert(JSON.stringify(getSearchWord.scheduleStore));
     }
 
     return (
@@ -129,11 +149,11 @@ function WeeklyInput({ weeklyData }: WeeklyDataProps) {
                 );
             })}
             {getSearchWord.isChanged && (
-                <div>
-                    <button onClick={handleReset}>cancle</button>
+                <ButtonContainer>
+                    <Button onClick={handleReset}>cancle</Button>
 
-                    <button onClick={handleUpdate}>submit</button>
-                </div>
+                    <Button onClick={handleUpdate}>submit</Button>
+                </ButtonContainer>
             )}
         </>
     );

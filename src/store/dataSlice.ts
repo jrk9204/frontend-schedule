@@ -38,7 +38,6 @@ export const searchSlice = createSlice({
             let [currWeekend, dataId] = action.payload;
             let filterData = state.scheduleStore[currWeekend].filter((el) => el.id !== dataId);
 
-            console.log(action.payload[1], state.scheduleStore);
             state.scheduleStore[currWeekend] = filterData;
         },
         setAddData: (state, action: PayloadAction<string>) => {
@@ -84,7 +83,6 @@ export const searchSlice = createSlice({
 
         updateData: (state, action: PayloadAction<Array<number>>) => {
             searchSlice.caseReducers.resetData(state, action);
-
             state.isChanged = false;
         },
     },
