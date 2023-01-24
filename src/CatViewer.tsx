@@ -4,8 +4,7 @@ import styled from "styled-components";
 
 const ImageContainer = styled.div`
     background-color: var(--grey);
-    /* width: 700px; */
-    width: 100%;
+    width: 700px;
     columns: 3;
     gap: 10px;
     border: 2px solid var(--blue);
@@ -77,23 +76,21 @@ function CatViewer() {
         fetchData();
     }, []);
 
-    // useEffect(() => {
-    //     const handleScroll = () => {
-    //         const { scrollTop, offsetHeight } = document.documentElement;
-    //         if (window.innerHeight + scrollTop + 10 >= offsetHeight) {
-    //             fetchDataa();
-    //         }
-    //     };
+    useEffect(() => {
+        const handleScroll = () => {
+            const { scrollTop, offsetHeight } = document.documentElement;
+            if (window.innerHeight + scrollTop + 10 >= offsetHeight) {
+                fetchDataa();
+            }
+        };
 
-    //     window.addEventListener("scroll", handleScroll);
-    //     return () => window.removeEventListener("scroll", handleScroll);
-    // }, []);
+        window.addEventListener("scroll", handleScroll);
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
 
     function handleImg(currUrl) {
         setIsClicked((preObj) => ({ ...preObj, isClick: true, currUrl: currUrl }));
     }
-
-    function imgCloseUp() {}
 
     return (
         <div>
