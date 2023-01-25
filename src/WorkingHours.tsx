@@ -1,42 +1,33 @@
-import { library } from "@fortawesome/fontawesome-svg-core";
-import {
-    faChevronDown,
-    faChevronRight,
-    faPlus,
-    faTrashCan,
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState } from "react";
 import styled from "styled-components";
-import weekly from "./components/data/weeklyData";
+import IconAtom from "./components/atoms/icon";
 import WeeklyInput from "./components/template/weeklyInput";
-
-library.add(faChevronDown, faTrashCan, faPlus, faChevronRight);
+import { setDropModal } from "./store/dataSlice";
+import { useAppDispatch, useAppSelector } from "./store/reduxHooks";
 
 const MainContainer = styled.div`
     margin: 4rem 0;
 `;
 
-const MainTitle = styled.div`
-    text-align: center;
-`;
-
 const MainBody = styled.div`
-    max-width: 70vw;
+    min-width: 70vw;
     min-height: 100vh;
     margin: 0 auto;
 `;
 const BodyWrapper = styled.div`
     display: flex;
+
+    justify-content: center;
 `;
 
 const MainSide = styled.div`
-    flex: 0.4;
+    min-width: 15rem;
+
     text-align: center;
 `;
 
 const MainContent = styled.div`
-    flex: 1;
+    min-width: 40rem;
+
     margin: 0 2rem;
 `;
 
@@ -44,20 +35,19 @@ const ContentTitle = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid #313536;
+    border-bottom: 1px solid #b4b4b4;
 `;
 
 const ContentBody = styled.div``;
 
 function WorkingHours() {
-    const [isShowSchedule, setIsShowSchedule] = useState(false);
+    const getSearchWord = useAppSelector((state) => state.sdheduleState);
+    const dispatch = useAppDispatch();
     function handleArrow() {
-        setIsShowSchedule((pre) => !pre);
+        dispatch(setDropModal());
     }
     return (
         <MainContainer>
-            <MainTitle>2번 과제 - WorkingHours</MainTitle>
-
             <MainBody>
                 <BodyWrapper>
                     <MainSide>
@@ -68,26 +58,16 @@ function WorkingHours() {
                         <ContentTitle>
                             <h4>Set your weekly hours</h4>
 
-                            {!isShowSchedule && (
-                                <FontAwesomeIcon
-                                    icon="chevron-down"
-                                    style={{ cursor: "pointer", transition: "0.5s" }}
-                                    onClick={handleArrow}
-                                />
+                            {!getSearchWord.isShowTable && (
+                                <IconAtom iconName="chevron-down" handleArrow={handleArrow} />
                             )}
 
-                            {isShowSchedule && (
-                                <FontAwesomeIcon
-                                    icon="chevron-right"
-                                    style={{ cursor: "pointer", transition: "0.5s" }}
-                                    onClick={handleArrow}
-                                />
+                            {getSearchWord.isShowTable && (
+                                <IconAtom iconName="chevron-right" handleArrow={handleArrow} />
                             )}
                         </ContentTitle>
 
-                        <ContentBody>
-                            {isShowSchedule && <WeeklyInput weeklyData={weekly} />}
-                        </ContentBody>
+                        <ContentBody>{getSearchWord.isShowTable && <WeeklyInput />}</ContentBody>
                     </MainContent>
                 </BodyWrapper>
             </MainBody>

@@ -1,47 +1,20 @@
 import styled from "styled-components";
+import { TimeInputProps } from "../../data/types";
 import { setTimeData } from "../../store/dataSlice";
 import { useAppDispatch } from "../../store/reduxHooks";
+import functionModule from "../commons/functionModule";
 
 const InputCompo = styled.select`
-    width: 8.5rem;
+    width: 9rem;
     height: 2.5rem;
-    margin: 0.5rem 0;
+    margin: 0.5rem 0.3rem;
+    border-radius: 5px;
 `;
 
-interface TimeProps {
-    timeProps: string;
-}
-
-function Input({ dataProps, objectKey, date }: any) {
+function Input({ date, dataProps, objectKey }: TimeInputProps) {
     const dispatch = useAppDispatch();
 
-    let times = [];
-
-    function makeTimeOptions() {
-        const timeOptions = [
-            "00",
-            "01",
-            "02",
-            "03",
-            "04",
-            "05",
-            "06",
-            "07",
-            "08",
-            "09",
-            "10",
-            "11",
-        ];
-        const minsOptions = ["00", "15", "30", "45"];
-
-        timeOptions.forEach((hours) => {
-            minsOptions.forEach((mins) => {
-                times.push(`${hours}:${mins}`);
-            });
-        });
-    }
-
-    makeTimeOptions();
+    let times = functionModule.makeTimeOptions();
 
     function handleSelect(e) {
         dispatch(setTimeData([e.target.value, dataProps.id, objectKey, date]));
@@ -54,7 +27,7 @@ function Input({ dataProps, objectKey, date }: any) {
             onChange={handleSelect}
         >
             {times.map((timesEl, idx) => (
-                <option key={idx}>{timesEl}</option>
+                <option key={timesEl + idx}>{timesEl}</option>
             ))}
         </InputCompo>
     );

@@ -2,49 +2,21 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 
+// https://codepen.io/desandro/pen/eRRQVo
 const ImageContainer = styled.div`
-    background-color: var(--grey);
-    width: 700px;
-    columns: 3;
-    gap: 10px;
-    border: 2px solid var(--blue);
-    padding: 10px;
-    margin: 0 auto; // change margin for non supported browsers
-
-    @supports (grid-template-columns: masonry) {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        grid-template-rows: masonry;
-        align-tracks: stretch;
-        break-inside: avoid;
-        margin-bottom: 10px;
-    }
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: masonry;
+    grid-auto-flow: dense;
+    align-tracks: stretch;
+    width: 70vw;
 `;
 
 const PicImg = styled.img`
-    width: 100%;
-    /* background-color: black;
-    border: 2px solid yellow;
-    display: flex;
-    justify-content: center;
-    align-items: center; */
-    cursor: pointer;
-
-    /* &:hover {
-        transform: scale(3);
-        transition: all ease-in-out 0.5s;
-    }
-
-    &:focus {
-        transform: scale(3);
-        transition: 0.5s;
-    }
-     */
+    max-width: 100%;
 `;
 
-const CloseImage = styled.img`
-    transition: all ease 2s 0s;
-`;
+const CloseImage = styled.img``;
 
 function CatViewer() {
     const [renderImg, setRenderImg] = useState([]);
@@ -76,17 +48,17 @@ function CatViewer() {
         fetchData();
     }, []);
 
-    useEffect(() => {
-        const handleScroll = () => {
-            const { scrollTop, offsetHeight } = document.documentElement;
-            if (window.innerHeight + scrollTop + 10 >= offsetHeight) {
-                fetchDataa();
-            }
-        };
+    // useEffect(() => {
+    //     const handleScroll = () => {
+    //         const { scrollTop, offsetHeight } = document.documentElement;
+    //         if (window.innerHeight + scrollTop + 10 >= offsetHeight) {
+    //             fetchDataa();
+    //         }
+    //     };
 
-        window.addEventListener("scroll", handleScroll);
-        return () => window.removeEventListener("scroll", handleScroll);
-    }, []);
+    //     window.addEventListener("scroll", handleScroll);
+    //     return () => window.removeEventListener("scroll", handleScroll);
+    // }, []);
 
     function handleImg(currUrl) {
         setIsClicked((preObj) => ({ ...preObj, isClick: true, currUrl: currUrl }));
