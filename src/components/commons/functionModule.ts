@@ -14,7 +14,6 @@ function increaseTime(time: string) {
     } else {
         mins = String(Number(mins) + 15);
     }
-
     return `${hours}:${mins}`;
 }
 

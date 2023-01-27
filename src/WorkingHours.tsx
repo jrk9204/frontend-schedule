@@ -46,6 +46,7 @@ function WorkingHours() {
     function handleArrow() {
         dispatch(setDropModal());
     }
+
     return (
         <MainContainer>
             <MainBody>

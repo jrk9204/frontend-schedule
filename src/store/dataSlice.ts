@@ -65,7 +65,7 @@ export const searchSlice = createSlice({
             state.isChanged = true;
         },
 
-        resetData: (state, action: PayloadAction<Array<number>>) => {
+        resetData: (state) => {
             state.scheduleStore = {
                 Sunday: [],
                 Monday: [],
@@ -81,7 +81,6 @@ export const searchSlice = createSlice({
 
         updateData: (state, action: PayloadAction<Array<number>>) => {
             // searchSlice.caseReducers.resetData(state, action);
-
             window.alert("저장되었습니다");
             state.isChanged = false;
         },

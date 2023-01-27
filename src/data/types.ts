@@ -50,3 +50,16 @@ export interface InputBodyProps {
     dataList: WeekendTypes;
     weekend: string;
 }
+
+export interface ImgDataType {
+    breeds: Array<string>;
+    height: number;
+    id: string;
+    url: string;
+    width: number;
+}
+
+export interface ImageSliceType {
+    imgData: Array<ImageData>;
+    loading: boolean;
+}

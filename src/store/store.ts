@@ -1,20 +1,28 @@
-import { configureStore, getDefaultMiddleware } from "@reduxjs/toolkit";
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { persistReducer, persistStore } from "redux-persist";
-import storage from "redux-persist/lib/storage";
+import storage from "redux-persist/lib/storage/session";
 import scheduleData from "./dataSlice";
+import imageDataReducer from "./imageSlice";
 
 const persistConfig = {
     key: "root",
     storage,
+    blacklist: ["imageState"],
 };
 
-const persistedReducer = persistReducer(persistConfig, scheduleData);
+const rootReducer = combineReducers({
+    sdheduleState: scheduleData,
+    imageState: imageDataReducer,
+});
+
+const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 export const store = configureStore({
-    reducer: { sdheduleState: persistedReducer },
-    middleware: getDefaultMiddleware({
-        serializableCheck: false,
-    }),
+    reducer: persistedReducer,
+    middleware: (getDefaultMiddleware) =>
+        getDefaultMiddleware({
+            serializableCheck: false,
+        }),
 });
 
 export const persistor = persistStore(store);
