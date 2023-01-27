@@ -10,34 +10,69 @@ const ImageContainer = styled.div`
 `;
 
 const LoadingContainer = styled.div`
-    min-height: 90vh;
+    min-height: 70vh;
     display: flex;
     justify-content: center;
     align-items: center;
 `;
 
 const CatImgContainer = styled.div`
-    display: grid;
-    grid-gap: 10px;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    grid-auto-rows: auto;
+    padding: 3rem 0;
+    columns: 4;
+    gap: 0.5rem;
 `;
 
 const CatImg = styled.img`
     max-width: 100%;
+    cursor: pointer;
 `;
 
-const PopUp = styled.div<{ getOpacity: number }>``;
+const CatClickedImg = styled.img`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width: 80%;
+    max-height: 80%;
+    cursor: pointer;
+    overflow: hidden;
+
+    z-index: 1;
+    transition: 0.3s;
+    animation: fadein 1s;
+    @keyframes fadein {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+`;
+
+const PopUpBackGround = styled.div`
+    background-color: rgba(0, 0, 0, 0.877);
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem 0;
+    transition: 0.3s;
+    z-index: 1;
+`;
 
 function CatViewer() {
     const getImageData = useAppSelector((state) => state.imageState);
     const dispatch = useAppDispatch();
-    const [isClosedUp, setIsClosedUp] = useState(false);
+    const [isClosedUp, setIsClosedUp] = useState({ isClicked: false, currUrl: "" });
 
     const handleScroll = throttle(() => {
         const { scrollTop, clientHeight, scrollHeight } = document.documentElement;
 
-        if (scrollTop + 500 >= scrollHeight - clientHeight) {
+        if (scrollTop + 300 >= scrollHeight - clientHeight) {
             dispatch(asyncUpFetch());
         }
     }, 1000);
@@ -50,22 +85,33 @@ function CatViewer() {
         };
     }, []);
 
-    function handleImg() {
-        setIsClosedUp((pre) => !pre);
+    function handleImg(urlProps) {
+        setIsClosedUp((pre) => ({ ...pre, isClicked: !pre.isClicked, currUrl: urlProps }));
     }
     return (
         <ImageContainer>
             <CatImgContainer>
                 {getImageData.imgData.map((el: any, idx) => {
                     return (
-                        <CatImg key={el.id + el.url + idx} src={el.url} onClick={handleImg} />
-                        // {isClosedUp && (
-                        //     <PopUp getOpacity={1}>
-                        //         <img src={el.url} alt="image" style={{ width: 100 }} />
-                        //     </PopUp>
-                        // )}
+                        <>
+                            <CatImg
+                                key={el.id + el.url + idx}
+                                src={el.url}
+                                onClick={() => handleImg(el.url)}
+                            />
+                        </>
                     );
                 })}
+
+                {isClosedUp.isClicked && (
+                    <PopUpBackGround>
+                        <CatClickedImg
+                            src={isClosedUp.currUrl}
+                            alt="이미지"
+                            onClick={() => handleImg("")}
+                        />
+                    </PopUpBackGround>
+                )}
             </CatImgContainer>
             {getImageData.loading && (
                 <LoadingContainer>
