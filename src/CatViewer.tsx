@@ -18,7 +18,7 @@ const LoadingContainer = styled.div`
 
 const CatImgContainer = styled.div`
     padding: 3rem 0;
-    columns: 4;
+    columns: 3;
     gap: 0.5rem;
 `;
 
@@ -64,26 +64,58 @@ const PopUpBackGround = styled.div`
     z-index: 1;
 `;
 
+
+const TargetElement = styled.div`
+height:140px;
+
+`
+
 function CatViewer() {
     const getImageData = useAppSelector((state) => state.imageState);
     const dispatch = useAppDispatch();
     const [isClosedUp, setIsClosedUp] = useState({ isClicked: false, currUrl: "" });
+    const [target,setTarget] = useState(null);
 
-    const handleScroll = throttle(() => {
-        const { scrollTop, clientHeight, scrollHeight } = document.documentElement;
+    // const handleScroll = throttle(() => {
+    //     const { scrollTop, clientHeight, scrollHeight } = document.documentElement;
 
-        if (scrollTop + 300 >= scrollHeight - clientHeight) {
-            dispatch(asyncUpFetch());
+    //     if (scrollTop + 300 >= scrollHeight - clientHeight) {
+    //         dispatch(asyncUpFetch());
+    //     }
+    // }, 1000);
+
+    // useEffect(() => {
+    //     dispatch(asyncUpFetch());
+    //     window.addEventListener("scroll", handleScroll);
+    //     return () => {
+    //         window.removeEventListener("scroll", handleScroll);
+    //     };
+    // }, []);
+
+
+
+    const onIntersect = async ([entry], observer) => {
+        if (entry.isIntersecting && !getImageData.loading) {
+          observer.unobserve(entry.target);
+          await     dispatch(asyncUpFetch());
+
+          observer.observe(entry.target);
         }
-    }, 1000);
+      };
 
     useEffect(() => {
-        dispatch(asyncUpFetch());
-        window.addEventListener("scroll", handleScroll);
-        return () => {
-            window.removeEventListener("scroll", handleScroll);
-        };
-    }, []);
+        let observer;
+        if (target) {
+          observer = new IntersectionObserver(onIntersect, {
+            threshold: 0.4,
+          });
+          observer.observe(target);
+        }
+        return () => observer && observer.disconnect();
+      }, [target  ]);
+      
+
+
 
     function handleImg(urlProps) {
         setIsClosedUp((pre) => ({ ...pre, isClicked: !pre.isClicked, currUrl: urlProps }));
@@ -113,11 +145,14 @@ function CatViewer() {
                     </PopUpBackGround>
                 )}
             </CatImgContainer>
+
+            <TargetElement ref={setTarget}>
             {getImageData.loading && (
                 <LoadingContainer>
                     <Loading />
                 </LoadingContainer>
             )}
+            </TargetElement>
         </ImageContainer>
     );
 }
