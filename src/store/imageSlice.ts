@@ -4,7 +4,7 @@ import { ImageSliceType } from "../data/types";
 import { ImgDataType } from "./../data/types";
 
 const initialState = {
-    imgData: [],
+    imgData: [[], [], []],
     loading: false,
 } as ImageSliceType;
 
@@ -31,7 +31,25 @@ export const imgDataSlice = createSlice({
             })
             .addCase(asyncUpFetch.fulfilled, (state, { payload }: any) => {
                 state.loading = false;
-                state.imgData.push(...payload.data);
+
+                let column = 0;
+
+                for (let i = 0; i < payload.data.length; i++) {
+                    if (column === 0) {
+                        state.imgData[0].push(payload.data[i]);
+
+                        column += 1;
+                    } else if (column === 1) {
+                        state.imgData[1].push(payload.data[i]);
+
+                        column += 1;
+                    } else {
+                        state.imgData[2].push(payload.data[i]);
+                        column = 0;
+                    }
+                }
+
+                // state.imgData.push(...payload.data);
             })
             .addCase(asyncUpFetch.rejected, (state, { payload }) => {
                 state.loading = false;

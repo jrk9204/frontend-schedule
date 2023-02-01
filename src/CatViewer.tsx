@@ -1,4 +1,3 @@
-import { throttle } from "lodash";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import Loading from "./components/organism/loading";
@@ -18,13 +17,20 @@ const LoadingContainer = styled.div`
 
 const CatImgContainer = styled.div`
     padding: 3rem 0;
-    columns: 3;
+    display: grid;
+    grid-template-columns: repeat(3, auto);
     gap: 0.5rem;
+`;
+
+const CatImgWrapper = styled.div`
+    display: flex;
+    flex-direction: column;
 `;
 
 const CatImg = styled.img`
     max-width: 100%;
     cursor: pointer;
+    margin: 0.2rem 0;
 `;
 
 const CatClickedImg = styled.img`
@@ -64,17 +70,15 @@ const PopUpBackGround = styled.div`
     z-index: 1;
 `;
 
-
 const TargetElement = styled.div`
-height:140px;
-
-`
+    height: 300px;
+`;
 
 function CatViewer() {
     const getImageData = useAppSelector((state) => state.imageState);
     const dispatch = useAppDispatch();
     const [isClosedUp, setIsClosedUp] = useState({ isClicked: false, currUrl: "" });
-    const [target,setTarget] = useState(null);
+    const [target, setTarget] = useState(null);
 
     // const handleScroll = throttle(() => {
     //     const { scrollTop, clientHeight, scrollHeight } = document.documentElement;
@@ -92,30 +96,25 @@ function CatViewer() {
     //     };
     // }, []);
 
-
-
     const onIntersect = async ([entry], observer) => {
         if (entry.isIntersecting && !getImageData.loading) {
-          observer.unobserve(entry.target);
-          await     dispatch(asyncUpFetch());
+            observer.unobserve(entry.target);
+            await dispatch(asyncUpFetch());
 
-          observer.observe(entry.target);
+            observer.observe(entry.target);
         }
-      };
+    };
 
     useEffect(() => {
         let observer;
         if (target) {
-          observer = new IntersectionObserver(onIntersect, {
-            threshold: 0.4,
-          });
-          observer.observe(target);
+            observer = new IntersectionObserver(onIntersect, {
+                threshold: 0.4,
+            });
+            observer.observe(target);
         }
         return () => observer && observer.disconnect();
-      }, [target  ]);
-      
-
-
+    }, [target]);
 
     function handleImg(urlProps) {
         setIsClosedUp((pre) => ({ ...pre, isClicked: !pre.isClicked, currUrl: urlProps }));
@@ -125,13 +124,19 @@ function CatViewer() {
             <CatImgContainer>
                 {getImageData.imgData.map((el: any, idx) => {
                     return (
-                        <>
-                            <CatImg
-                                key={el.id + el.url + idx}
-                                src={el.url}
-                                onClick={() => handleImg(el.url)}
-                            />
-                        </>
+                        <CatImgWrapper>
+                            {el.map((imgEl, idx) => {
+                                return (
+                                    <>
+                                        <CatImg
+                                            key={el.id + el.url + idx}
+                                            src={imgEl.url}
+                                            onClick={() => handleImg(imgEl.url)}
+                                        />
+                                    </>
+                                );
+                            })}
+                        </CatImgWrapper>
                     );
                 })}
 
@@ -147,11 +152,11 @@ function CatViewer() {
             </CatImgContainer>
 
             <TargetElement ref={setTarget}>
-            {getImageData.loading && (
-                <LoadingContainer>
-                    <Loading />
-                </LoadingContainer>
-            )}
+                {getImageData.loading && (
+                    <LoadingContainer>
+                        <Loading />
+                    </LoadingContainer>
+                )}
             </TargetElement>
         </ImageContainer>
     );

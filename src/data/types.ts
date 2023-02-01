@@ -60,6 +60,6 @@ export interface ImgDataType {
 }
 
 export interface ImageSliceType {
-    imgData: Array<ImageData>;
+    imgData: Array<Array<ImageData>>;
     loading: boolean;
 }
